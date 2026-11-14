@@ -26,7 +26,7 @@ button.secondary{background:#333}
 <p style="color:#999;font-size:13px">Open this page inside the Phantom app browser (Phantom &rarr; Browser tab &rarr; paste this link). If the button says no wallet found, you are not in Phantom's browser.</p>
 <script>
 const PARAMS = new URLSearchParams(location.search);
-const MESSAGE = PARAMS.get("m") || "make.fun account change v1; Change: pin this account's rewards to the wallet 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT (agent 4d4aC76C7RU9w4xdZXiU8cAPbSSyQgBEXHQe4jZJPWJY, every competition, until 2027-02-12T08:05:18.084Z); Domain: make.fun; Account: @aliarga87; Wallet: 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT; Chain ID: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp; Nonce: 75d1d2aac471cad2cbcc20fb540932bd; Issued At: 2026-11-14T10:22:24.408Z; Expiration Time: 2026-11-14T10:27:24.408Z";
+const MESSAGE = PARAMS.get("m") || "make.fun account change v1; Change: pin this account's rewards to the wallet 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT (agent 4d4aC76C7RU9w4xdZXiU8cAPbSSyQgBEXHQe4jZJPWJY, every competition, until 2027-02-12T08:05:18.084Z); Domain: make.fun; Account: @aliarga87; Wallet: 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT; Chain ID: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp; Nonce: f097ef005788dd835a1016909b8d1809; Issued At: 2026-11-14T10:32:31.799Z; Expiration Time: 2026-11-14T10:37:31.799Z";
 document.getElementById('msg').textContent = MESSAGE;
 const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 function toBase58(bytes){
