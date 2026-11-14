@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign make.fun payout pin</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#111;color:#eee;max-width:640px;margin:0 auto;padding:24px}
+h1{font-size:20px}
+pre{background:#222;padding:12px;border-radius:8px;white-space:pre-wrap;word-break:break-word;font-size:13px}
+button{background:#e6007a;color:#fff;border:0;border-radius:10px;padding:14px 20px;font-size:16px;width:100%;margin:8px 0;cursor:pointer}
+button.secondary{background:#333}
+#sig{font-size:13px;word-break:break-all;background:#0b3d2e;padding:12px;border-radius:8px;display:none}
+#status{margin:10px 0;color:#f5c542}
+</style>
+</head>
+<body>
+<h1>Sign make.fun payout pin</h1>
+<p>This signs one off-chain message with your Phantom wallet (<b>2w5k...rQWT</b>). No transaction, no fee. It confirms that make.fun rewards for @aliarga87 go to your wallet.</p>
+<p><b>Message to sign:</b></p>
+<pre id="msg"></pre>
+<button id="signBtn">Sign with Phantom</button>
+<p id="status"></p>
+<div id="sig"></div>
+<button id="copyBtn" class="secondary" style="display:none">Copy signature</button>
+<p style="color:#999;font-size:13px">Open this page inside the Phantom app browser (Phantom &rarr; Browser tab &rarr; paste this link). If the button says no wallet found, you are not in Phantom's browser.</p>
+<script>
+const PARAMS = new URLSearchParams(location.search);
+const MESSAGE = PARAMS.get("m") || "make.fun account change v1; Change: pin this account's rewards to the wallet 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT (agent 4d4aC76C7RU9w4xdZXiU8cAPbSSyQgBEXHQe4jZJPWJY, every competition, until 2027-02-12T08:05:18.084Z); Domain: make.fun; Account: @aliarga87; Wallet: 2w5kp8if9NDkVA4p6RXGBCyUpQCnFGr4EHr2a75JrQWT; Chain ID: solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp; Nonce: 75d1d2aac471cad2cbcc20fb540932bd; Issued At: 2026-11-14T10:22:24.408Z; Expiration Time: 2026-11-14T10:27:24.408Z";
+document.getElementById('msg').textContent = MESSAGE;
+const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function toBase58(bytes){
+  let n = 0n;
+  for (const b of bytes) n = (n << 8n) | BigInt(b);
+  let s = "";
+  while (n > 0n) { s = ALPHABET[Number(n % 58n)] + s; n /= 58n; }
+  let leading = 0;
+  for (const b of bytes) { if (b === 0) leading++; else break; }
+  return "1".repeat(leading) + s;
+}
+let lastSig = "";
+document.getElementById('signBtn').onclick = async () => {
+  const status = document.getElementById('status');
+  try {
+    const provider = window.solana;
+    if (!provider || !provider.isPhantom) { status.textContent = "No Phantom wallet found in this browser. Open this link inside the Phantom app browser."; return; }
+    status.textContent = "Connecting to Phantom...";
+    await provider.connect();
+    status.textContent = "Waiting for your signature in Phantom...";
+    const { signature } = await provider.signMessage(new TextEncoder().encode(MESSAGE), "utf8");
+    lastSig = toBase58(signature);
+    const box = document.getElementById('sig');
+    box.style.display = "block";
+    box.textContent = lastSig;
+    document.getElementById('copyBtn').style.display = "block";
+    status.textContent = "Signed! Copy the signature and send it to Muse.";
+  } catch (e) {
+    status.textContent = "Failed: " + (e && e.message ? e.message : e);
+  }
+};
+document.getElementById('copyBtn').onclick = async () => {
+  try { await navigator.clipboard.writeText(lastSig); document.getElementById('status').textContent = "Signature copied."; }
+  catch (e) { document.getElementById('status').textContent = "Copy failed — long-press the signature to copy it manually."; }
+};
+</script>
+</body>
+</html>
